@@ -27,7 +27,15 @@ export default [
       'no-console': 'off',
     }, 
   },
-   { 
+  {
+    files: ['**/*.{test,spec}.js'],
+    languageOptions: {
+      globals: { ...globals.jest }, // <-- makes describe/test/expect defined
+    },
+    plugins: { jest: jestPlugin },
+    ...jestPlugin.configs['flat/recommended'], // optional: recommended Jest rules
+  },
+  { 
     ignores: ['dist/**'], 
   },
 ]
