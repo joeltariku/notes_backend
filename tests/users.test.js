@@ -20,6 +20,8 @@ describe('when there is initially one user in db', () => {
     const response = await api.get('/api/users')
       .expect(200)
       .expect('Content-Type', /application\/json/)
+
+    expect(response.body.length).toBe(1)
   })
 
   test('creation succeeds with a fresh username', async () => {
