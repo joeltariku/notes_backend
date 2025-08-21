@@ -80,8 +80,18 @@ describe('when there is initially some notes saved', () => {
         userId: firstUser.id
       }
 
+      const login = {
+        username: 'root',
+        password: 'sekret'
+      }
+      const loginResponse = await api
+        .post('/api/login')
+        .send(login)
+        .expect(200)
+
       const response = await api
         .post('/api/notes')
+        .set('Authorization', `Bearer ${loginResponse.body.token}`)
         .send(newNote)
         .expect(201)
         .expect('Content-Type', /application\/json/)
@@ -105,7 +115,20 @@ describe('when there is initially some notes saved', () => {
     test('fails with status code 400 if data invalid', async () => {
       const newNote = { important: true }
 
-      await api.post('/api/notes').send(newNote).expect(400)
+       const login = {
+        username: 'root',
+        password: 'sekret'
+      }
+      const loginResponse = await api
+        .post('/api/login')
+        .send(login)
+        .expect(200)
+
+      await api
+        .post('/api/notes')
+        .set('Authorization', `Bearer ${loginResponse.body.token}`)
+        .send(newNote)
+        .expect(400)
 
       const notesAtEnd = await helper.notesInDb()
 
